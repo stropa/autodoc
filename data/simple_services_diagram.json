@@ -1,0 +1,16 @@
+﻿{
+    "nodes":[
+      {"name":"service: BookingService", "width":200, "height":80},
+      {"name":"service: PlanningService", "width":200, "height":80},
+      {"name":"service: UIBackendService", "width":200, "height":80},
+      {"name":"service: CalculationService", "width":200, "height":80}
+
+    ],
+    "links":[
+
+    ],
+	"groups":[
+	  {"leaves":[0,1,2], "name":"host: app-1"},
+	  {"leaves":[3], "name":"host: exec-1"}
+	]
+}
