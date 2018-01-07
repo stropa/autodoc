@@ -1,16 +1,21 @@
 ﻿{
     "nodes":[
-      {"name":"service: BookingService", "width":200, "height":80},
-      {"name":"service: PlanningService", "width":200, "height":80},
-      {"name":"service: UIBackendService", "width":200, "height":80},
-      {"name":"service: CalculationService", "width":200, "height":80}
+      {"name":"service: BookingService", "fill":"auto", "width":200, "height":80},
+      {"name":"service: PlanningService", "fill":"auto", "width":200, "height":80},
+      {"name":"service: UIBackendService", "fill":"auto", "width":200, "height":80},
+      {"name":"service: CalculationService", "fill":"auto", "width":200, "height":80},
+      {"name":"search", "view":"api-method", "width":160, "height":50},
+      {"name":"book", "view":"api-method", "width":160, "height":50}
 
     ],
     "links":[
-
+      {"source":1, "target":3},
+      {"source":0, "target":5},
+      {"source":1, "target":4}
     ],
 	"groups":[
-	  {"leaves":[0,1,2], "name":"host: app-1"},
-	  {"leaves":[3], "name":"host: exec-1"}
+	  {"leaves":[0,1,2,4], "groups":[2], "name":"host: app-1"},
+	  {"leaves":[3], "name":"host: exec-1"},
+      {"leaves":[4,5], "name":"API: Planning API"}
 	]
 }
