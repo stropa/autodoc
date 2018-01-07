@@ -4882,7 +4882,7 @@ var html = type("text/html", function(xhr) {
 });
 
 var json = type("application/json", function(xhr) {
-  return JSON.parse(xhr.responseText);
+  return JSON.parse(JSON.minify(xhr.responseText)); // added small hack to use comments in json files
 });
 
 var text = type("text/plain", function(xhr) {
