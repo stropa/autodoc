@@ -180,6 +180,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var layout_1 = require("./layout");
+
 var D3StyleLayoutAdaptor = (function (_super) {
     __extends(D3StyleLayoutAdaptor, _super);
     function D3StyleLayoutAdaptor() {
