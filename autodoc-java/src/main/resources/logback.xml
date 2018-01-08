@@ -1,0 +1,13 @@
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date %-5p [%20.20t] %30.30c{30} %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="${rootLogLevel:-INFO}">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <logger name="org.stropa" level="DEBUG"/>
+</configuration>
