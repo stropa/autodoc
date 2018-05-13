@@ -17,14 +17,6 @@
     </parent>
 
 
-    <properties>
-        <scala.short.version>2.11</scala.short.version>
-        <scalatest.version>2.2.6</scalatest.version>
-        <scalamock.version>3.4.1</scalamock.version>
-        <scala-maven-plugin.version>3.2.2</scala-maven-plugin.version>
-    </properties>
-
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -46,7 +38,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- Something strange with maven dependencies, need it here -->
         <dependency>
             <groupId>org.elasticsearch</groupId>
             <artifactId>elasticsearch</artifactId>
@@ -91,55 +82,12 @@
             <artifactId>feign-jackson</artifactId>
             <version>9.5.1</version>
         </dependency>
-        <dependency>
-            <groupId>org.clapper</groupId>
-            <artifactId>grizzled-slf4j_${scala.short.version}</artifactId>
-            <version>1.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.scalatest</groupId>
-            <artifactId>scalatest_${scala.short.version}</artifactId>
-            <version>${scalatest.version}</version>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
 
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>net.alchim31.maven</groupId>
-                <artifactId>scala-maven-plugin</artifactId>
-                <version>${scala-maven-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.scalatest</groupId>
-                <artifactId>scalatest-maven-plugin</artifactId>
-                <version>1.0</version>
-                <executions>
-                    <execution>
-                        <id>unit-tests</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                        <configuration>
-                            <tagsToExclude>integration,e2e,deactivated</tagsToExclude>
-                            <argLine>-Xmx512m</argLine>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

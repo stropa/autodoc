@@ -4,11 +4,11 @@ import java.net.InetAddress
 
 import org.stropa.autodoc.engine.Item
 
-class HostnameReporter extends AutonomousReporter {
+class HostnameDescriber extends Describer {
 
-    def report: Item = {
+    def report: Iterable[Item] = {
       val hostName: String = InetAddress.getLocalHost.getHostName
-      Item(name = hostName, `type` = "host")
+      Seq(Item(name = hostName, `type` = "host"))
     }
 
   }

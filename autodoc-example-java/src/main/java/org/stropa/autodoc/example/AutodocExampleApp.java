@@ -7,8 +7,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.stropa.autodoc.engine.AutodocEngine;
-import org.stropa.autodoc.reporters.DummyDockerReporter;
-import org.stropa.autodoc.reporters.HostnameReporter;
+import org.stropa.autodoc.engine.AutodocJavaEngine;
+import org.stropa.autodoc.reporters.DummyDockerDescriber;
+import org.stropa.autodoc.reporters.HostnameDescriber;
 
 import java.util.Arrays;
 
@@ -29,8 +30,8 @@ public class AutodocExampleApp implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         logger.info("Writing structure docs");
-        AutodocEngine doc = new AutodocEngine(null);
-        doc.writeDocs(Arrays.asList(new HostnameReporter(), new DummyDockerReporter()));
+        AutodocJavaEngine doc = new AutodocJavaEngine(null);
+        doc.writeDocs(Arrays.asList(new HostnameDescriber(), new DummyDockerDescriber()));
     }
 
 }

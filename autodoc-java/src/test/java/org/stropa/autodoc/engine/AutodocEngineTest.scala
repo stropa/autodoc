@@ -1,6 +1,7 @@
 package org.stropa.autodoc.engine
 
 import org.scalatest.FlatSpec
+import org.stropa.autodoc.reporters.HostnameDescriber
 
 
 class AutodocEngineTest extends FlatSpec {
@@ -10,7 +11,7 @@ class AutodocEngineTest extends FlatSpec {
   val doc = new AutodocEngine(null)
 
   it should "write hostname to storage" in {
-    doc.reportHostName
+    doc.writeDocs(List(new HostnameDescriber()))
   }
 
 }
