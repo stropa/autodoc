@@ -14,7 +14,7 @@
       {"source":1, "target":4}
     ],
 	"groups":[
-	  {"leaves":[0,1,2,4], "groups":[2], "name":"host: app-1"},
+	  {"leaves":[0,1,2], "groups":[2], "name":"host: app-1"},
 	  {"leaves":[3], "name":"host: exec-1"},
       {"leaves":[4,5], "name":"API: Planning API"}
 	]

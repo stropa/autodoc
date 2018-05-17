@@ -8,6 +8,6 @@ import org.stropa.autodoc.engine.Item
   */
 trait Describer {
 
-  def report: Iterable[Item]
+  def report: java.util.List[Item]
 
 }
