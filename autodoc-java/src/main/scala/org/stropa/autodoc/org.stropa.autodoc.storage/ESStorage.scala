@@ -11,7 +11,7 @@ class ESStorage(config: Config) extends Storage {
 
   val client = new RestHighLevelClient(
     RestClient.builder(
-      new HttpHost(config.getString("elasticsearch-host"), config.getInt("elasticsearch-port"), "http")))
+      new HttpHost(config.getString("elasticsearch.host"), config.getInt("elasticsearch.port"), "http")))
 
   def write(map: Map[String, Any]) = {
     import scala.collection.JavaConverters._

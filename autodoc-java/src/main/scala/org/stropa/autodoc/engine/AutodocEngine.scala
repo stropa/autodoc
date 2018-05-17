@@ -2,7 +2,6 @@ package org.stropa.autodoc.engine
 
 import com.typesafe.config.{Config, ConfigFactory}
 import org.stropa.autodoc.org.stropa.autodoc.storage.{FileStorage, LoggingStorage, Storage}
-import org.stropa.autodoc.reporters.Describer
 import org.stropa.autodoc.storage.ESStorage
 
 
@@ -15,15 +14,16 @@ class AutodocEngine(var config: Config) {
     config = ConfigFactory.load()
   }
 
-  private val storageName = config.getString("storage-type")
+  private val storageName = config.getString("storage.type")
+  private val storageConfig = config.getConfig("storage")
 
-  implicit val storage: Storage =
+  val storage: Storage =
     if (storageName.toLowerCase() == "es")
-      new ESStorage(config)
+      new ESStorage(config.getConfig("storage"))
     else if (storageName.toLowerCase() == "slf4j")
       new LoggingStorage()
     else if (storageName.toLowerCase() == "file")
-      new FileStorage(config)
+      new FileStorage(storageConfig)
     else throw new IllegalArgumentException(s"Unsupported storage $storageName")
 
 

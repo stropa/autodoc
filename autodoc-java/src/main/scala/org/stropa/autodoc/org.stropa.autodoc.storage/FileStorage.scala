@@ -8,7 +8,7 @@ import com.typesafe.config.Config
 class FileStorage(config: Config) extends Storage {
 
   val mapper = new ObjectMapper()
-  val writer = new PrintWriter(new File(config.getString("storage-file")))
+  val writer = new PrintWriter(new File(config.getString("file")))
 
   override def write(map: Map[String, Any]) = {
 
