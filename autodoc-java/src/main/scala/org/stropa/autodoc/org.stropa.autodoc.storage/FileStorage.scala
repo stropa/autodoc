@@ -5,10 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.typesafe.config.Config
 
 
-class FileStorage(config: Config) extends Storage {
+class FileStorage(fileName: String) extends Storage {
 
   val mapper = new ObjectMapper()
-  val writer = new PrintWriter(new File(config.getString("file")))
+  val writer = new PrintWriter(new File(fileName))
 
   override def write(map: Map[String, Any]) = {
 

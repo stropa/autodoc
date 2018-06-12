@@ -1,9 +1,6 @@
 package org.stropa.autodoc.reporters
 
-import java.util
-import scala.collection.JavaConverters._
-
-import org.stropa.autodoc.engine.Item
+import org.stropa.autodoc.engine.{Graph, Item}
 
 
 class DockerContainerDescriber(var containerNameEnvVariable: String = "docker-container-name") extends Describer {
@@ -12,8 +9,12 @@ class DockerContainerDescriber(var containerNameEnvVariable: String = "docker-co
     this("docker-container-name")
   }
 
-  override def report: util.List[Item] = {
+  override def describe: Graph = {
     val containerName = System.getenv(containerNameEnvVariable)
-    List(Item(_type = "docker-container", name=containerName)).asJava
+    Graph(
+      nodes = if (containerName != null && !containerName.isEmpty)
+        List(Item(_type = "docker-container", name = containerName)) else List(),
+      links = List()
+    )
   }
 }

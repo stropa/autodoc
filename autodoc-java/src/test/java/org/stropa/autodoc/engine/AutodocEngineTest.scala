@@ -9,10 +9,10 @@ class AutodocEngineTest extends FlatSpec {
 
   behavior of "AutodocEngine"
 
-  val doc = new AutodocEngine(null)
+  val doc = new AutodocEngine()
 
   it should "write hostname to storage" in {
-    doc.addInfo(new HostnameDescriber().report.asScala.toList, List())
+    //doc.addInfo(new HostnameDescriber().describe)
     doc.writeSnapshot()
   }
 

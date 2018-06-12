@@ -2,14 +2,19 @@ package org.stropa.autodoc.reporters
 
 import java.net.InetAddress
 
-import org.stropa.autodoc.engine.Item
-import scala.collection.JavaConverters._
+import org.stropa.autodoc.engine.{Graph, Item}
 
 class HostnameDescriber extends Describer {
 
-  def report: java.util.List[Item] = {
+
+  override def describe: Graph = {
+
     val hostName: String = InetAddress.getLocalHost.getHostName
-    List(Item(name = hostName, _type = "host")).asJava
+
+    Graph(
+      nodes = List(Item(name = hostName, _type = "host")),
+      links = List()
+    )
   }
 
 }

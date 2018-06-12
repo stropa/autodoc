@@ -1,16 +1,47 @@
 package org.stropa.autodoc.engine
 
-import com.typesafe.config.{Config, ConfigFactory}
-import org.stropa.autodoc.org.stropa.autodoc.storage.{FileStorage, LoggingStorage, Storage}
-import org.stropa.autodoc.storage.ESStorage
+import grizzled.slf4j.Logging
+import org.stropa.autodoc.org.stropa.autodoc.storage.Storage
+import org.stropa.autodoc.reporters.Describer
 
 
-class AutodocEngine(var config: Config) {
+class AutodocEngine() extends Logging {
 
-  var items = List[Item]()
-  var links = List[Link]()
+  var graph: Graph = Graph(List(), List())
 
-  if (config == null) {
+
+  def addInfo(newItems: List[Item], newLinks: List[Link]) = {
+    graph = graph.merge(Graph(newItems, newLinks))
+  }
+
+
+  var describers = Map[String, Describer]()
+
+  def doc(whatToDoc: String) = describers.get(whatToDoc).foreach(d => {
+    graph = graph.merge(d.describe)
+  })
+
+
+  def writeDocs(storage: Storage) = {
+
+    graph.nodes.foreach(item => {
+      storage.write(item.attributes + ("id" -> item.id) + ("name" -> item.name) + ("type" -> item._type))
+    })
+
+    graph.links.foreach(link => {
+      storage.write(Map[String, Any](
+        "from" -> link.from.id,
+        "to" -> link.to.id,
+        "relation" -> link.relation
+      ))
+    })
+
+  }
+
+
+  def writeSnapshot() = {}
+
+  /*if (config == null) {
     config = ConfigFactory.load()
   }
 
@@ -24,15 +55,13 @@ class AutodocEngine(var config: Config) {
       new LoggingStorage()
     else if (storageName.toLowerCase() == "file")
       new FileStorage(storageConfig)
-    else throw new IllegalArgumentException(s"Unsupported storage $storageName")
+    else throw new IllegalArgumentException(s"Unsupported storage $storageName")*/
 
+  /*def writeSnapshot() = {
 
-  def addInfo(newItems: List[Item], newRelations: Iterable[Link]) = {
-    items ++= newItems
-    links ++= newRelations
-  }
-
-  def writeSnapshot() = {
+    info("Writing autodoc snapshot...")
+    info(s"items: $items")
+    info(s"links: $links")
 
     items.foreach(item => {
       storage.write(item.attributes + ("id" -> item.id) + ("name" -> item.name) + ("type" -> item._type))
@@ -45,7 +74,7 @@ class AutodocEngine(var config: Config) {
         "relation" -> link.relation
       ))
     })
-  }
+  }*/
 
 
 }

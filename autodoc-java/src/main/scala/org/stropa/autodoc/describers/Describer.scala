@@ -1,6 +1,6 @@
 package org.stropa.autodoc.reporters
 
-import org.stropa.autodoc.engine.Item
+import org.stropa.autodoc.engine.{Graph, Item}
 
 
 /**
@@ -8,6 +8,6 @@ import org.stropa.autodoc.engine.Item
   */
 trait Describer {
 
-  def report: java.util.List[Item]
+  def describe: Graph
 
 }
