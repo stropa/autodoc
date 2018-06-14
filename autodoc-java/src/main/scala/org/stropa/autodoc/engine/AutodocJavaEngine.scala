@@ -1,32 +1,23 @@
 package org.stropa.autodoc.engine
 
-import com.typesafe.config.Config
+import java.util.Optional
+
 import org.stropa.autodoc.describers.spring.SpringApplicationDescriber
 import org.stropa.autodoc.org.stropa.autodoc.storage.Storage
 import org.stropa.autodoc.reporters.{Describer, DockerContainerDescriber, HostnameDescriber}
 
 import scala.collection.JavaConverters._
 
-class AutodocJavaEngine(config: Config) {
+class AutodocJavaEngine(implicit context: java.util.Map[String, Any]) {
 
   val engine = new AutodocEngine()
 
-  def addInfo(newItems: java.util.List[Item], newRelations: java.util.List[Link]) = {
-    engine.addInfo(newItems.asScala.toList, newRelations.asScala.toList)
-  }
+  val basicDescribers = defaultDescribers()
+  engine.describers ++= basicDescribers
 
-  def writeSnapshot() = {
-    engine.writeSnapshot()
-  }
-}
+  val linkSpecs: List[LinkSpec] = defaultLinkSpecs()
 
-object AutodocJavaEngine {
 
-  val engine = new AutodocEngine()
-
-  val availableDescribers: collection.mutable.Map[String, Describer] = collection.mutable.Map()
-  availableDescribers ++= defaultDescribersSetup()
-  engine.describers ++= availableDescribers
 
   def doc(whatToDoc: String) = {
     engine.doc(whatToDoc)
@@ -40,13 +31,43 @@ object AutodocJavaEngine {
     engine.writeDocs(storage)
   }
 
+  def node(ref: String): Optional[Item] = {
+    Optional.ofNullable(engine.graph.node(ref).orNull)
+  }
 
-  def defaultDescribersSetup(): Map[String, Describer] = {
+  def link(from: Optional[Item], relation: String, to: Optional[Item]) = {
+    if (from.isPresent && to.isPresent && relation != null && !relation.isEmpty) {
+      engine.link(from.get(), relation, to.get())
+    }
+  }
+
+  def addLinkSpec(fromRef: String, relation: String, toRef: String) = {
+
+  }
+
+  def defaultDescribers(): Map[String, Describer] = {
     Map(
       "hostname" -> new HostnameDescriber,
       "docker-container" -> new DockerContainerDescriber,
-      "application" -> new SpringApplicationDescriber
+      "application" -> new SpringApplicationDescriber(context.asScala.toMap)
     )
   }
 
+  def defaultDocs() = {
+    basicDescribers.keysIterator.foreach(doc)
+    defaultLinkSpecs()
+  }
+
+  def defaultLinkSpecs(): List[LinkSpec] = {
+    List(
+      LinkSpec("_type:docker-container", "hosted-on", "_type:host"),
+      LinkSpec("_type:spring-application", "runs-in", "_type:docker-container")
+    )
+  }
+
+
+  def writeSnapshot() = {
+    engine.writeSnapshot()
+  }
 }
+

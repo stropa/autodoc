@@ -7,6 +7,10 @@ import org.stropa.autodoc.reporters.Describer
 
 class AutodocEngine() extends Logging {
 
+  def link(from: Item, relation: String, to: Item) = {
+    addInfo(List(), List( Link(from, relation, to) ))
+  }
+
   var graph: Graph = Graph(List(), List())
 
 
