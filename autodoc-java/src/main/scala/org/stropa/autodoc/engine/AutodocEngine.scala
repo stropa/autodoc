@@ -29,7 +29,9 @@ class AutodocEngine() extends Logging {
   def writeDocs(storage: Storage) = {
 
     graph.nodes.foreach(item => {
-      storage.write(item.attributes + ("id" -> item.id) + ("name" -> item.name) + ("type" -> item._type))
+      val map: Map[String, Any] = Map("attributes" -> item.attributes) + ("id" -> item.id) + ("name" -> item.name) +
+        ("type" -> item._type)
+      storage.write(map)
     })
 
     graph.links.foreach(link => {
