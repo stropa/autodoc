@@ -11,17 +11,23 @@ import scala.io.Source
 
 class Node(val key: String, var text: String, var color: Option[String] = None,
            var group: Option[String] = None, var isGroup: Boolean = false,
-          var attributes: Option[Any] = None)
+           var attributes: Option[Any] = None,
+           var category: Option[String] = None,
+           var expanded: Boolean = true
+          )
 
 class Link(val from: String, val to: String, var label: String = "", var color: Option[String] = None)
 
 class GojsModel(var nodes: List[Node], var links: List[Link])
+
+case class Attribute(name: String, value: String)
 
 
 object TranslatorToGoJS extends App {
 
 
   val groupingRelations = Seq("deployed on", "runs on")
+  val nodeTypesCollapsedByDefault = Seq("Environment")
 
 
   val input = args(0)
@@ -37,8 +43,13 @@ object TranslatorToGoJS extends App {
 
 
   private val model = new GojsModel(
-    nodes = items.map(m => new Node(key = m("id").toString, text = m("name").toString,
-      attributes = m.get("attributes"))
+    nodes = items.map(m => new Node(
+      key = m("id").toString, text = m("name").toString,
+      attributes = m.get("attributes").map(_.asInstanceOf[Map[String, Any]].map {
+        case (name: String, value: Any) => Attribute(name, value.toString)
+      }),
+      expanded = ! nodeTypesCollapsedByDefault.contains(m("type"))
+    )
     ),
     links = relations.map(m => new Link(from = m("from").toString, to = m("to").toString, label = m("relation").toString))
   )
@@ -46,19 +57,23 @@ object TranslatorToGoJS extends App {
   //val groups = collection.mutable.Map[String, Int]()
 
   model.links.foreach(link => {
-    if (groupingRelations.contains(link.label)) {
-      val toNode = model.nodes.find(_.key == link.to).get
-      val fromNode = model.nodes.find(_.key == link.from).get
-      toNode.isGroup = true
-      fromNode.group = Some(toNode.key)
-    }
+    //if (groupingRelations.contains(link.label)) {
+    val toNode = model.nodes.find(_.key == link.to).get
+    val fromNode = model.nodes.find(_.key == link.from).get
+    toNode.isGroup = true
+    fromNode.group = Some(toNode.key)
+    // }
+  })
+
+  model.nodes.foreach(node => {
+    if (!node.isGroup) node.category = Some("simple")
   })
 
   model.links = model.links.filterNot(link => {
     val toNode = model.nodes.find(_.key == link.to).get
     val fromNode = model.nodes.find(_.key == link.from).get
-    groupingRelations.contains(link.label) &&
-      toNode.isGroup && toNode.key == fromNode.group.getOrElse("")
+    //groupingRelations.contains(link.label) &&
+    toNode.isGroup && toNode.key == fromNode.group.getOrElse("")
   })
 
 

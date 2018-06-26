@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Basic GoJS Sample</title>
+    <meta name="description"
+          content="Interactive GoJS diagram demonstrating creating new nodes and links, reconnecting links, grouping and ungrouping, and context menus and tooltips for nodes, for links, and for the diagram background."/>
+    <!-- Copyright 1998-2018 by Northwoods Software Corporation. -->
+    <meta charset="UTF-8">
+    <script src="./js/jquery-3.2.1.js"></script>
+    <script>
+        $.noConflict()
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/1.8.21/go-debug.js"></script>
+    <!--<script src="./js/goSamples.js"></script>-->  <!-- this is only for the GoJS Samples framework -->
+    <script id="code">
+        function init() {
+            var $ = go.GraphObject.make;
+
+            var diagram =
+                $(go.Diagram, "myDiagramDiv",  // create a Diagram for the DIV HTML element
+                    {
+                        layout: $(go.TreeLayout),
+                        // position the graph in the middle of the diagram
+                        initialContentAlignment: go.Spot.Center,
+
+                        // allow double-click in background to create a new node
+                        "clickCreatingTool.archetypeNodeData": {text: "Node", color: "white"},
+
+                        // allow Ctrl-G to call groupSelection()
+                        "commandHandler.archetypeGroupData": {text: "Group", isGroup: true, color: "blue"},
+
+                        // enable undo & redo
+                        "undoManager.isEnabled": true
+                    });
+
+            // this function changes the category of the node data to cause the Node to be replaced
+            function changeCategory(e, obj) {
+                var node = obj.part;
+                if (node) {
+                    var diagram = node.diagram;
+                    diagram.startTransaction("changeCategory");
+                    var cat = diagram.model.getCategoryForNodeData(node.data);
+                    if (cat === "simple")
+                        cat = "detailed";
+                    else
+                        cat = "simple";
+                    diagram.model.setCategoryForNodeData(node.data, cat);
+                    diagram.commitTransaction("changeCategory");
+                }
+            }
+
+            var itemTempl =
+                $(go.Panel, "TableRow",
+                    $(go.TextBlock,
+                        {
+                            column: 0,
+                            stroke: "#333333",
+                            font: "bold 12px sans-serif"
+                        },
+                        new go.Binding("text", "name")
+                    ),
+                    $(go.TextBlock,
+                        {
+                            column: 1,
+                            stroke: "#333333",
+                            font: "bold 12px sans-serif"
+                        },
+                        new go.Binding("text", "value")
+                    )
+                );
+
+
+            // The "simple" template just shows the key string and the color in the background.
+            // There is a Button to invoke the changeCategory function.
+            var simpletemplate =
+                $(go.Node, "Spot",
+                    $(go.Panel, "Auto",
+                        $(go.Shape, "RoundedRectangle", {fill: "white"}),
+                        $(go.TextBlock,
+                            new go.Binding("text", "text"))
+                    ),
+                    $("Button",
+                        {alignment: go.Spot.TopRight},
+                        $(go.Shape, "AsteriskLine", {width: 8, height: 8}),
+                        {click: changeCategory})
+                );
+
+            // The "detailed" template shows all of the information in a Table Panel.
+            // There is a Button to invoke the changeCategory function.
+            var detailtemplate =
+                $(go.Node, "Spot",
+                    $(go.Panel, "Auto",
+                        $(go.Shape, "RoundedRectangle", {fill: "white"}),
+                        $(go.Panel, "Table",
+                            {
+                                defaultAlignment: go.Spot.Left,
+                                itemTemplate: itemTempl
+                            },
+                            new go.Binding("itemArray", "attributes")
+                        )
+                    ),
+                    $("Button",
+                        {alignment: go.Spot.TopRight},
+                        $(go.Shape, "AsteriskLine", {width: 8, height: 8}),
+                        {click: changeCategory})
+                );
+
+
+            var templmap = new go.Map("string", go.Node);
+            templmap.add("simple", simpletemplate);
+            templmap.add("detailed", detailtemplate);
+
+            diagram.nodeTemplateMap = templmap;
+
+            diagram.groupTemplate =
+                $(go.Group, "Auto",
+                    { layout: $(go.TreeLayout) },
+                    $(go.Shape, "Rectangle", { fill: "white"}),
+                    $(go.Panel, "Table",
+                        { margin: 0.5 },  // avoid overlapping border with table contents
+                        $(go.RowColumnDefinition, { row: 0, background: "white" }),  // header is white
+                        $("SubGraphExpanderButton", { row: 0, column: 0, margin: 3 }),
+                        $(go.TextBlock,  // title is centered in header
+                            { row: 0, column: 1, font: "bold 14px Sans-Serif", stroke: "darkblue",
+                                textAlign: "center", stretch: go.GraphObject.Horizontal },
+                            new go.Binding("text")),
+                        $(go.Placeholder,  // becomes zero-sized when Group.isSubGraphExpanded is false
+                            { row: 1, columnSpan: 2, padding: 10, alignment: go.Spot.TopLeft },
+                            new go.Binding("padding", "isSubGraphExpanded",
+                                function(exp) { return exp ? 10 : 0; } ).ofObject())
+                    ),
+                    new go.Binding("isSubGraphExpanded", "expanded")
+                );
+
+
+            diagram.layout = $(go.TreeLayout);
+
+            /*diagram.model.nodeDataArray = [
+             { key: "Beta", desc: "second letter", color: "lightblue", category: "simple" },
+             { key: "Gamma", desc: "third letter", color: "pink", category: "detailed" },
+             { key: "Delta", desc: "fourth letter", color: "cyan", category: "detailed" }
+             ];
+             diagram.model.linkDataArray = [
+             { from: "Beta", to: "Gamma" },
+             { from: "Gamma", to: "Delta" }
+             ];*/
+
+            var data = jQuery.getJSON("./data/autodoc_gojs.json", function (data) {
+                diagram.model = new go.GraphLinksModel(data["nodes"], data["links"]);
+            });
+
+
+        }
+    </script>
+</head>
+<body onload="init()">
+<div id="sample">
+    <div id="myDiagramDiv" style="border: solid 1px black; width:100%; height:600px"></div>
+</div>
+</body>
+</html>
