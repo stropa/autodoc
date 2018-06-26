@@ -2,8 +2,9 @@ package org.stropa.autodoc.engine
 
 import java.util.Optional
 
+import org.springframework.context.ApplicationContext
 import org.stropa.autodoc.describers.spring.SpringApplicationDescriber
-import org.stropa.autodoc.org.stropa.autodoc.storage.Storage
+import org.stropa.autodoc.org.stropa.autodoc.storage.{FileStorage, Storage}
 import org.stropa.autodoc.reporters.{Describer, DockerContainerDescriber, HostnameDescriber}
 
 import scala.collection.JavaConverters._
@@ -69,5 +70,24 @@ class AutodocJavaEngine(implicit context: java.util.Map[String, Any]) {
   def writeSnapshot() = {
     engine.writeSnapshot()
   }
+
+
+  def describeSpringApplication(applicationContext: ApplicationContext, storage: FileStorage): Unit = {
+    doc("hostname")
+    doc("docker-container")
+    doc("application")
+    val docker = node("docker-container")
+    val application = node("_type:spring-application")
+    val host = node("_type:host")
+    if (docker.isPresent) {
+      link(application, "runs in", docker)
+      link(docker, "deployed on", host)
+    }  else  link(application, "deployed on", host)
+    writeDocs(storage)
+  }
+
+
+
+
 }
 
