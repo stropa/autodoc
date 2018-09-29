@@ -146,7 +146,7 @@
              { from: "Gamma", to: "Delta" }
              ];*/
 
-            var data = jQuery.getJSON("./data/autodoc_gojs.json", function (data) {
+            var data = jQuery.getJSON("./data/gojs-model.json", function (data) {
                 diagram.model = new go.GraphLinksModel(data["nodes"], data["links"]);
             });
 

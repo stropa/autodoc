@@ -16,6 +16,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
+    <properties>
+        <jackson.version>2.9.5</jackson.version>
+    </properties>
+
 
     <dependencyManagement>
         <dependencies>

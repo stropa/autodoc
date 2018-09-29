@@ -42,7 +42,7 @@ class AutodocJavaEngine(implicit context: java.util.Map[String, Any]) {
     }
   }
 
-  def addLinkSpec(fromRef: String, relation: String, toRef: String) = {
+  def addLinkSpec(fromRef: String, relation: String, toRef: String): Unit = {
 
   }
 
@@ -54,7 +54,7 @@ class AutodocJavaEngine(implicit context: java.util.Map[String, Any]) {
     )
   }
 
-  def defaultDocs() = {
+  def defaultDocs(): List[LinkSpec] = {
     basicDescribers.keysIterator.foreach(doc)
     defaultLinkSpecs()
   }
@@ -67,7 +67,7 @@ class AutodocJavaEngine(implicit context: java.util.Map[String, Any]) {
   }
 
 
-  def writeSnapshot() = {
+  def writeSnapshot(): Unit = {
     engine.writeSnapshot()
   }
 
