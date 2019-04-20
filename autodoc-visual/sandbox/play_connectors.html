@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Playing with svg connectors between divs</title>
+    <style>
+        .d-panel {
+            opacity: .6;
+            position: absolute;
+            background-color: #866766;
+            #color: #BBBBBB;
+        }
+    </style>
+
+    <script src="../js/layout.js"></script>
+    <script src="../js/connectors.js"></script>
+    <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src='https://d3js.org/d3.v4.js'></script>
+
+</head>
+<body>
+
+
+<div id="app">
+    <div id="vis" style="width: 100%; min-height: 100%; background-color: rgba(210,210,210,1); position: absolute">
+        <div id="one" class="d-panel col_1"
+             style="width: 140px; height: 60px; border: #2b2b2b; border-style: dashed; border-width: 2px">
+            <div>
+                <label>One</label>
+            </div>
+        </div>
+        <div id="two" class="d-panel col_2"
+             style="width: 140px; height: 60px; border: #2b2b2b; border-style: dashed; border-width: 2px">
+            <div>
+                <label>Two</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    //let links = [{source: document.getElementById("one"), target: document.getElementById("two")}];
+    let links = [{source: 0, target: 1}];
+    forceLayout("#vis", ".d-panel", {grid: [[".col_1", "col_2"]], padding: {x: 140, y: 20}}, links);
+
+    function connect() {
+        connectDivs("one", "two", "red", 0.2)
+    }
+
+    setTimeout(connect, 2000)
+</script>
+
+</body>
+</html>

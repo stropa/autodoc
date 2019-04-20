@@ -1,5 +1,6 @@
 package org.stropa.autodoc.describers.spring
 
+import org.springframework.boot.origin.OriginTrackedValue
 import org.springframework.context.ApplicationContext
 import org.springframework.core.env._
 import org.stropa.autodoc.engine.{Graph, Item, Link}
@@ -23,7 +24,6 @@ class SpringApplicationDescriber(context: Map[String, Any]) extends Describer {
       ).getOrElse("spring-application"))
 
 
-
     // getting properties
     val mapBuffer = collection.mutable.Map[String, Map[String, Any]]()
     val propertySources = appContext.get.getEnvironment.asInstanceOf[AbstractEnvironment].getPropertySources
@@ -37,6 +37,7 @@ class SpringApplicationDescriber(context: Map[String, Any]) extends Describer {
     val propsItemsAndLinks: mutable.Map[Item, Link] = mapBuffer.map {
       case (name: String, props: Map[String, Any]) =>
         val propertiesItem = Item(_type = "properties", name = name, attributes = props)
+
         val linkFromPropertiesToEnv = Link(propertiesItem, "properties of", environmentItem)
         (propertiesItem, linkFromPropertiesToEnv)
     }
@@ -50,13 +51,19 @@ class SpringApplicationDescriber(context: Map[String, Any]) extends Describer {
   }
 
 
-
   private def diveIntoPropertySource(map: mutable.Map[String, Map[String, Any]],
                                      propertySource: PropertySource[_],
                                      seenAlready: mutable.ArrayBuffer[PropertySource[_]]): Unit = {
     propertySource match {
-      case source: MapPropertySource =>
+      case source: MapPropertySource => {
+        val internalMap = source.getSource.asScala.map { case (k, v) => {
+          if (v.isInstanceOf[OriginTrackedValue]) {
+            (k, (v.asInstanceOf[OriginTrackedValue]).getValue)
+          } else (k, v)
+        }
+        }
         map ++= Map(source.getName -> source.getSource.asScala.toMap)
+      }
       case source: CompositePropertySource =>
 
         for (ps <- source.getPropertySources.asScala) {

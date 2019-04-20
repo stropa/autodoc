@@ -28,9 +28,35 @@ class AutodocEngine() extends Logging {
 
   def writeDocs(storage: Storage) = {
 
+    // *** DEBUG
+
+    /*addInfo(List(
+      /*
+      *Item(229da843-5e72-4497-842e-6b63392e544f,
+      * properties,
+      * applicationConfig: [classpath:/bootstrap.yml],
+      *   Map(
+      *     spring.cloud.config.uri -> http://config:8888,
+      *     spring.cloud.config.username -> user,
+      *     spring.cloud.config.fail-fast -> true,
+      *     spring.application.name -> account-service,
+      *     spring.cloud.config.password -> ${CONFIG_SERVICE_PASSWORD}))
+      * */
+      Item(id = "229da843-5e72-4497-842e-6b63392e544f", _type = "properties",
+        name = "applicationConfig: [classpath:/bootstrap.yml]",
+        attributes = Map[String, Any](
+          "spring.cloud.config.uri" -> "http://config:8888"
+        ))
+    ), List())*/
+
+    // *** DEBUG
+
     graph.nodes.foreach(item => {
-      val map: Map[String, Any] = Map("attributes" -> item.attributes) + ("id" -> item.id) + ("name" -> item.name) +
+      logger.trace(s"Writing item: $item")
+      val filteredAttributes = item.attributes.filterNot{ case (k, v) => v.toString.contains("${")}
+      val map: Map[String, Any] =  Map("attributes" -> filteredAttributes) + ("id" -> item.id) + ("name" -> item.name.replace("applicationConfig: [classpath:/bootstrap.yml]", "HALLO")) +
         ("type" -> item._type)
+      logger.trace(s"Writing map: $map")
       storage.write(map)
     })
 
