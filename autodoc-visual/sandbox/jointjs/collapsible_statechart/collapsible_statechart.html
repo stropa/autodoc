@@ -10,14 +10,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone.js"></script>
 <script src="../jointjs_2.1.0.js"></script>
-//<script src="containers.js"></script>
+<script src="containers.js"></script>
 
 
 <script type="text/javascript" >
 
     var graph = new joint.dia.Graph();
 
-    new joint.dia.Paper({
+    var paper = new joint.dia.Paper({
         el: document.getElementById('paper'),
         width: 800,
         height: 600,
@@ -34,7 +34,7 @@
 
         s1: new autodoc.Container({
             position: { x:100  , y: 100 },
-            size: { width: 200, height: 100 },
+            size: { width: '100%', height: '100' },
             name: 'state 1',
             events: ['entry / init()','exit / destroy()'],
             attrs: {
@@ -135,6 +135,14 @@
     ];
 
     graph.addCells(transitons);
+
+
+
+    // event handler for task group button
+    paper.on('element:collapse', function(elementView, evt) {
+        evt.stopPropagation();
+        toggleCollapse(elementView.model);
+    });
 
 </script>
 
