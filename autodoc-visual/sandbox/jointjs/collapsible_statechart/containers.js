@@ -104,6 +104,8 @@ function toggleCollapse(group) {
         });
         group.set('collapsed', false);
         //debugger;
+        group.set('events', group.get('eventsCollapsed'));
+        group.set('eventsCollapsed', []);
         group.size(group.get('sizeExpanded').width, group.get('sizeExpanded').height)
         //group.fitEmbeds({ padding: { top: 140, left: 10, right: 10, bottom: 10 }});
         group.attr('tool/stroke', 'blue');
@@ -123,6 +125,10 @@ function toggleCollapse(group) {
         // serialize subgraph
         group.set('sizeExpanded', group.size())
         group.set('subgraph', embeds.map(function(embed) { return embed.toJSON(); }));
+
+        group.set('eventsCollapsed', group.get('events'));
+        group.set('events', [' ']);
+
         group.resize(100, 100);
         group.set('collapsed', true);
         group.size(100, 40);
