@@ -1,14 +1,14 @@
 <head>
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/2.1.0/joint.css" />
+    <link rel="stylesheet" type="text/css" href="../jointjs_2.1.0.css" />
 </head>
 <body>
 <!-- content -->
 <div id="paper"></div>
 
 <!-- dependencies -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone.js"></script>
+<script src="../../../js/jquery-3.2.1.js"></script>
+<script src="../../../js/lodash.js"></script>
+<script src="../../../js/backbone.js"></script>
 <script src="../jointjs_2.1.0.js"></script>
 <script src="containers.js"></script>
 
@@ -38,13 +38,10 @@
             name: 'state 1',
             events: ['entry / init()','exit / destroy()'],
             attrs: {
-                '.uml-state-body': {
+                '.container-body': {
                     fill: 'rgba(48, 208, 198, 0.1)',
                     stroke: 'rgba(48, 208, 198, 0.5)',
                     'stroke-width': 1.5
-                },
-                '.uml-state-separator': {
-                    stroke: 'rgba(48, 208, 198, 0.4)'
                 }
             }
         }),
@@ -55,13 +52,10 @@
             name: 'state 2',
             events: ['entry / create()','exit / kill()','A / foo()','B / bar()'],
             attrs: {
-                '.uml-state-body': {
+                '.container-body': {
                     fill: 'rgba(48, 208, 198, 0.1)',
                     stroke: 'rgba(48, 208, 198, 0.5)',
                     'stroke-width': 1.5
-                },
-                '.uml-state-separator': {
-                    stroke: 'rgba(48, 208, 198, 0.4)'
                 }
             }
         }),
@@ -72,13 +66,10 @@
             name: 'state 3',
             events: ['entry / create()','exit / kill()'],
             attrs: {
-                '.uml-state-body': {
+                '.container-body': {
                     fill: 'rgba(48, 208, 198, 0.1)',
                     stroke: 'rgba(48, 208, 198, 0.5)',
                     'stroke-width': 1.5
-                },
-                '.uml-state-separator': {
-                    stroke: 'rgba(48, 208, 198, 0.4)'
                 }
             }
         }),
@@ -89,13 +80,10 @@
             name: 'sub state 4',
             events: ['entry / create()'],
             attrs: {
-                '.uml-state-body': {
+                '.container-body': {
                     fill: 'rgba(48, 208, 198, 0.1)',
                     stroke: 'rgba(48, 208, 198, 0.5)',
                     'stroke-width': 1.5
-                },
-                '.uml-state-separator': {
-                    stroke: 'rgba(48, 208, 198, 0.4)'
                 }
             }
         }),
