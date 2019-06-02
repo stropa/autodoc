@@ -1,0 +1,165 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="css/jointjs_2.1.0.css" />
+</head>
+<body>
+
+
+<div id="paper"></div>
+
+
+<script src="js/jquery-3.2.1.js"></script>
+<script src="js/jquery.xpath.js"></script>
+<script src="js/lodash.js"></script>
+<script src="js/backbone.js"></script>
+<script src="js/dagre.js"></script>
+<script src="js/graphlib.js"></script>
+<script src="js/jointjs_2.1.0.js"></script>
+<script src="js/rappid.js"></script>
+<script src="js/containers.js"></script>
+<script src="js/axios.js"></script>
+
+
+
+
+<script type="text/javascript" >
+
+    data = [];
+    visualSemantics = {
+        "properties of": "embed"/*,
+        "deployed on": "embed"*/
+    };
+
+    function loadData(onSuccess) {
+
+        // For local demo run
+        data = JSON.parse("[{\"type\":\"host\",\"name\":\"stropa-macbook.local\",\"id\":\"f5b8fdc1-40c8-49c9-8e74-ed6d0412c810\",\"attributes\":{}},{\"type\":\"spring-application\",\"name\":\"application-1\",\"id\":\"00be5c55-6f6e-4bc1-b9f3-dec94d07c4ec\",\"attributes\":{}},{\"type\":\"Environment\",\"name\":\"Environment\",\"id\":\"fbf3664f-54f1-4189-bd74-709d878f89a4\",\"attributes\":{}},{\"type\":\"properties\",\"name\":\"defaultProperties\",\"id\":\"b9dd9fc0-6896-4728-a9d1-e21d17ed788c\",\"attributes\":{}},{\"type\":\"properties\",\"name\":\"configServerClient\",\"id\":\"a1623a9b-2707-46d9-b640-68823b401636\",\"attributes\":{\"spring.cloud.config.enabled\":\"false\"}},{\"type\":\"properties\",\"name\":\"systemProperties\",\"id\":\"a022eb40-3bab-4c4b-a4c2-6d75426d1266\",\"attributes\":{\"java.io.tmpdir\":\"/var/folders/cv/my6mj5ys1ng5s42nws4qrpy00000gn/T/\",\"line.separator\":\"\\n\",\"path.separator\":\":\",\"sun.management.compiler\":\"HotSpot 64-Bit Tiered Compilers\",\"sun.cpu.endian\":\"little\",\"java.awt.headless\":\"true\",\"java.specification.version\":\"1.8\",\"java.vm.specification.name\":\"Java Virtual Machine Specification\",\"java.vendor\":\"Oracle Corporation\",\"java.vm.specification.version\":\"1.8\",\"user.home\":\"/Users/maxim\",\"file.encoding.pkg\":\"sun.io\",\"ftp.nonProxyHosts\":\"local|*.local|169.254/16|*.169.254/16\",\"sun.arch.data.model\":\"64\",\"sun.boot.library.path\":\"/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib\",\"spring.beaninfo.ignore\":\"true\",\"user.dir\":\"/Users/maxim/projects/my/autodoc\",\"java.library.path\":\"/Users/maxim/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.\",\"sun.cpu.isalist\":\"\",\"jboss.modules.system.pkgs\":\"com.intellij.rt\",\"os.arch\":\"x86_64\",\"java.vm.version\":\"25.191-b12\",\"java.endorsed.dirs\":\"/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/endorsed\",\"java.runtime.version\":\"1.8.0_191-b12\",\"java.vm.info\":\"mixed mode\",\"java.ext.dirs\":\"/Users/maxim/Library/Java/Extensions:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/ext:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java\",\"PID\":\"5892\",\"java.runtime.name\":\"Java(TM) SE Runtime Environment\",\"file.separator\":\"/\",\"java.class.version\":\"52.0\",\"java.specification.name\":\"Java Platform API Specification\",\"sun.boot.class.path\":\"/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/resources.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/rt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/sunrsasign.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/jsse.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/jce.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/charsets.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/jfr.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/classes\",\"file.encoding\":\"UTF-8\",\"user.timezone\":\"Europe/Moscow\",\"java.specification.vendor\":\"Oracle Corporation\",\"sun.java.launcher\":\"SUN_STANDARD\",\"os.version\":\"10.14.5\",\"sun.os.patch.level\":\"unknown\",\"gopherProxySet\":\"false\",\"catalina.home\":\"/private/var/folders/cv/my6mj5ys1ng5s42nws4qrpy00000gn/T/tomcat.22603799958583154.8085\",\"java.vm.specification.vendor\":\"Oracle Corporation\",\"user.country\":\"GB\",\"server.port\":\"8085\",\"sun.jnu.encoding\":\"UTF-8\",\"http.nonProxyHosts\":\"local|*.local|169.254/16|*.169.254/16\",\"user.language\":\"en\",\"socksNonProxyHosts\":\"local|*.local|169.254/16|*.169.254/16\",\"user.country.format\":\"RU\",\"java.vendor.url\":\"http://java.oracle.com/\",\"intellij.debug.agent\":\"true\",\"java.awt.printerjob\":\"sun.lwawt.macosx.CPrinterJob\",\"java.awt.graphicsenv\":\"sun.awt.CGraphicsEnvironment\",\"catalina.useNaming\":\"false\",\"awt.toolkit\":\"sun.lwawt.macosx.LWCToolkit\",\"java.class.path\":\"/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/charsets.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/deploy.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/ext/cldrdata.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/ext/dnsns.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/ext/jaccess.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/ext/jfxrt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/ext/localedata.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/ext/nashorn.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/ext/sunec.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/ext/sunjce_provider.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/ext/sunpkcs11.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/ext/zipfs.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/javaws.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/jce.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/jfr.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/jfxswt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/jsse.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/management-agent.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/plugin.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/resources.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre/lib/rt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/lib/ant-javafx.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/lib/dt.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/lib/javafx-mx.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/lib/jconsole.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/lib/packager.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/lib/sa-jdi.jar:/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/lib/tools.jar:/Users/maxim/projects/my/autodoc/autodoc-example-java/target/classes:/Users/maxim/projects/my/autodoc/autodoc-java/target/classes:/Users/maxim/.m2/repository/com/typesafe/config/1.3.1/config-1.3.1.jar:/Users/maxim/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.9.5/jackson-core-2.9.5.jar:/Users/maxim/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.9.5/jackson-databind-2.9.5.jar:/Users/maxim/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.9.0/jackson-annotations-2.9.0.jar:/Users/maxim/.m2/repository/com/fasterxml/jackson/module/jackson-module-scala_2.11/2.9.5/jackson-module-scala_2.11-2.9.5.jar:/Users/maxim/.m2/repository/org/scala-lang/scala-library/2.11.11/scala-library-2.11.11.jar:/Users/maxim/.m2/repository/org/scala-lang/scala-reflect/2.11.11/scala-reflect-2.11.11.jar:/Users/maxim/.m2/repository/com/fasterxml/jackson/module/jackson-module-paranamer/2.9.5/jackson-module-paranamer-2.9.5.jar:/Users/maxim/.m2/repository/com/thoughtworks/paranamer/paranamer/2.8/paranamer-2.8.jar:/Users/maxim/.m2/repository/org/clapper/grizzled-slf4j_2.11/1.2.0/grizzled-slf4j_2.11-1.2.0.jar:/Users/maxim/.m2/repository/org/slf4j/slf4j-api/1.7.26/slf4j-api-1.7.26.jar:/Users/maxim/.m2/repository/ch/qos/logback/logback-classic/1.2.3/logback-classic-1.2.3.jar:/Users/maxim/.m2/repository/ch/qos/logback/logback-core/1.2.3/logback-core-1.2.3.jar:/Users/maxim/.m2/repository/org/slf4j/log4j-over-slf4j/1.7.26/log4j-over-slf4j-1.7.26.jar:/Users/maxim/.m2/repository/org/elasticsearch/elasticsearch/6.1.1/elasticsearch-6.1.1.jar:/Users/maxim/.m2/repository/org/apache/lucene/lucene-core/7.1.0/lucene-core-7.1.0.jar:/Users/maxim/.m2/repository/org/apache/lucene/lucene-analyzers-common/7.1.0/lucene-analyzers-common-7.1.0.jar:/Users/maxim/.m2/repository/org/apache/lucene/lucene-backward-codecs/7.1.0/lucene-backward-codecs-7.1.0.jar:/Users/maxim/.m2/repository/org/apache/lucene/lucene-grouping/7.1.0/lucene-grouping-7.1.0.jar:/Users/maxim/.m2/repository/org/apache/lucene/lucene-highlighter/7.1.0/lucene-highlighter-7.1.0.jar:/Users/maxim/.m2/repository/org/apache/lucene/lucene-join/7.1.0/lucene-join-7.1.0.jar:/Users/maxim/.m2/repository/org/apache/lucene/lucene-memory/7.1.0/lucene-memory-7.1.0.jar:/Users/maxim/.m2/repository/org/apache/lucene/lucene-misc/7.1.0/lucene-misc-7.1.0.jar:/Users/maxim/.m2/repository/org/apache/lucene/lucene-queries/7.1.0/lucene-queries-7.1.0.jar:/Users/maxim/.m2/repository/org/apache/lucene/lucene-queryparser/7.1.0/lucene-queryparser-7.1.0.jar:/Users/maxim/.m2/repository/org/apache/lucene/lucene-sandbox/7.1.0/lucene-sandbox-7.1.0.jar:/Users/maxim/.m2/repository/org/apache/lucene/lucene-spatial/7.1.0/lucene-spatial-7.1.0.jar:/Users/maxim/.m2/repository/org/apache/lucene/lucene-spatial-extras/7.1.0/lucene-spatial-extras-7.1.0.jar:/Users/maxim/.m2/repository/org/apache/lucene/lucene-spatial3d/7.1.0/lucene-spatial3d-7.1.0.jar:/Users/maxim/.m2/repository/org/apache/lucene/lucene-suggest/7.1.0/lucene-suggest-7.1.0.jar:/Users/maxim/.m2/repository/org/elasticsearch/securesm/1.2/securesm-1.2.jar:/Users/maxim/.m2/repository/org/elasticsearch/elasticsearch-cli/6.1.1/elasticsearch-cli-6.1.1.jar:/Users/maxim/.m2/repository/net/sf/jopt-simple/jopt-simple/5.0.2/jopt-simple-5.0.2.jar:/Users/maxim/.m2/repository/com/carrotsearch/hppc/0.7.1/hppc-0.7.1.jar:/Users/maxim/.m2/repository/joda-time/joda-time/2.10.1/joda-time-2.10.1.jar:/Users/maxim/.m2/repository/org/yaml/snakeyaml/1.23/snakeyaml-1.23.jar:/Users/maxim/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-smile/2.9.5/jackson-dataformat-smile-2.9.5.jar:/Users/maxim/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-yaml/2.9.5/jackson-dataformat-yaml-2.9.5.jar:/Users/maxim/.m2/repository/com/fasterxml/jackson/dataformat/jackson-dataformat-cbor/2.9.5/jackson-dataformat-cbor-2.9.5.jar:/Users/maxim/.m2/repository/com/tdunning/t-digest/3.0/t-digest-3.0.jar:/Users/maxim/.m2/repository/org/hdrhistogram/HdrHistogram/2.1.9/HdrHistogram-2.1.9.jar:/Users/maxim/.m2/repository/org/apache/logging/log4j/log4j-api/2.11.2/log4j-api-2.11.2.jar:/Users/maxim/.m2/repository/org/elasticsearch/jna/4.4.0-1/jna-4.4.0-1.jar:/Users/maxim/.m2/repository/org/springframework/cloud/spring-cloud-starter-config/2.1.0.RELEASE/spring-cloud-starter-config-2.1.0.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/cloud/spring-cloud-starter/2.1.0.RELEASE/spring-cloud-starter-2.1.0.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/cloud/spring-cloud-context/2.1.0.RELEASE/spring-cloud-context-2.1.0.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/cloud/spring-cloud-commons/2.1.0.RELEASE/spring-cloud-commons-2.1.0.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/cloud/spring-cloud-config-client/2.1.0.RELEASE/spring-cloud-config-client-2.1.0.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/2.1.4.RELEASE/spring-boot-autoconfigure-2.1.4.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/boot/spring-boot-starter-web/2.1.4.RELEASE/spring-boot-starter-web-2.1.4.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/boot/spring-boot-starter/2.1.4.RELEASE/spring-boot-starter-2.1.4.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/boot/spring-boot/2.1.4.RELEASE/spring-boot-2.1.4.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/boot/spring-boot-starter-logging/2.1.4.RELEASE/spring-boot-starter-logging-2.1.4.RELEASE.jar:/Users/maxim/.m2/repository/org/apache/logging/log4j/log4j-to-slf4j/2.11.2/log4j-to-slf4j-2.11.2.jar:/Users/maxim/.m2/repository/org/slf4j/jul-to-slf4j/1.7.26/jul-to-slf4j-1.7.26.jar:/Users/maxim/.m2/repository/javax/annotation/javax.annotation-api/1.3.2/javax.annotation-api-1.3.2.jar:/Users/maxim/.m2/repository/org/springframework/spring-core/5.1.6.RELEASE/spring-core-5.1.6.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/spring-jcl/5.1.6.RELEASE/spring-jcl-5.1.6.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/boot/spring-boot-starter-json/2.1.4.RELEASE/spring-boot-starter-json-2.1.4.RELEASE.jar:/Users/maxim/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.9.5/jackson-datatype-jdk8-2.9.5.jar:/Users/maxim/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.9.5/jackson-datatype-jsr310-2.9.5.jar:/Users/maxim/.m2/repository/com/fasterxml/jackson/module/jackson-module-parameter-names/2.9.5/jackson-module-parameter-names-2.9.5.jar:/Users/maxim/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat/2.1.4.RELEASE/spring-boot-starter-tomcat-2.1.4.RELEASE.jar:/Users/maxim/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/9.0.17/tomcat-embed-core-9.0.17.jar:/Users/maxim/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/9.0.17/tomcat-embed-el-9.0.17.jar:/Users/maxim/.m2/repository/org/apache/tomcat/embed/tomcat-embed-websocket/9.0.17/tomcat-embed-websocket-9.0.17.jar:/Users/maxim/.m2/repository/org/hibernate/validator/hibernate-validator/6.0.16.Final/hibernate-validator-6.0.16.Final.jar:/Users/maxim/.m2/repository/javax/validation/validation-api/2.0.1.Final/validation-api-2.0.1.Final.jar:/Users/maxim/.m2/repository/org/jboss/logging/jboss-logging/3.3.2.Final/jboss-logging-3.3.2.Final.jar:/Users/maxim/.m2/repository/com/fasterxml/classmate/1.4.0/classmate-1.4.0.jar:/Users/maxim/.m2/repository/org/springframework/spring-web/5.1.6.RELEASE/spring-web-5.1.6.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/spring-beans/5.1.6.RELEASE/spring-beans-5.1.6.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/spring-webmvc/5.1.6.RELEASE/spring-webmvc-5.1.6.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/spring-aop/5.1.6.RELEASE/spring-aop-5.1.6.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/spring-context/5.1.6.RELEASE/spring-context-5.1.6.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/spring-expression/5.1.6.RELEASE/spring-expression-5.1.6.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/boot/spring-boot-starter-security/2.1.4.RELEASE/spring-boot-starter-security-2.1.4.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/security/spring-security-config/5.1.5.RELEASE/spring-security-config-5.1.5.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/security/spring-security-core/5.1.5.RELEASE/spring-security-core-5.1.5.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/security/spring-security-web/5.1.5.RELEASE/spring-security-web-5.1.5.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/cloud/spring-cloud-config-server/2.1.0.RELEASE/spring-cloud-config-server-2.1.0.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/boot/spring-boot-starter-actuator/2.1.4.RELEASE/spring-boot-starter-actuator-2.1.4.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/boot/spring-boot-actuator-autoconfigure/2.1.4.RELEASE/spring-boot-actuator-autoconfigure-2.1.4.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/boot/spring-boot-actuator/2.1.4.RELEASE/spring-boot-actuator-2.1.4.RELEASE.jar:/Users/maxim/.m2/repository/io/micrometer/micrometer-core/1.1.4/micrometer-core-1.1.4.jar:/Users/maxim/.m2/repository/org/latencyutils/LatencyUtils/2.0.3/LatencyUtils-2.0.3.jar:/Users/maxim/.m2/repository/org/springframework/security/spring-security-crypto/5.1.5.RELEASE/spring-security-crypto-5.1.5.RELEASE.jar:/Users/maxim/.m2/repository/org/springframework/security/spring-security-rsa/1.0.7.RELEASE/spring-security-rsa-1.0.7.RELEASE.jar:/Users/maxim/.m2/repository/org/bouncycastle/bcpkix-jdk15on/1.60/bcpkix-jdk15on-1.60.jar:/Users/maxim/.m2/repository/org/bouncycastle/bcprov-jdk15on/1.60/bcprov-jdk15on-1.60.jar:/Users/maxim/.m2/repository/org/eclipse/jgit/org.eclipse.jgit/5.1.3.201810200350-r/org.eclipse.jgit-5.1.3.201810200350-r.jar:/Users/maxim/.m2/repository/com/jcraft/jsch/0.1.54/jsch-0.1.54.jar:/Users/maxim/.m2/repository/com/jcraft/jzlib/1.1.1/jzlib-1.1.1.jar:/Users/maxim/.m2/repository/com/googlecode/javaewah/JavaEWAH/1.1.6/JavaEWAH-1.1.6.jar:/Users/maxim/.m2/repository/org/eclipse/jgit/org.eclipse.jgit.http.apache/5.1.3.201810200350-r/org.eclipse.jgit.http.apache-5.1.3.201810200350-r.jar:/Users/maxim/.m2/repository/org/apache/httpcomponents/httpclient/4.5.8/httpclient-4.5.8.jar:/Users/maxim/.m2/repository/commons-codec/commons-codec/1.11/commons-codec-1.11.jar:/Users/maxim/.m2/repository/org/apache/httpcomponents/httpcore/4.4.11/httpcore-4.4.11.jar:/Users/maxim/.m2/repository/org/springframework/boot/spring-boot-starter-jetty/2.1.4.RELEASE/spring-boot-starter-jetty-2.1.4.RELEASE.jar:/Users/maxim/.m2/repository/org/eclipse/jetty/jetty-servlets/9.4.15.v20190215/jetty-servlets-9.4.15.v20190215.jar:/Users/maxim/.m2/repository/org/eclipse/jetty/jetty-continuation/9.4.15.v20190215/jetty-continuation-9.4.15.v20190215.jar:/Users/maxim/.m2/repository/org/eclipse/jetty/jetty-http/9.4.15.v20190215/jetty-http-9.4.15.v20190215.jar:/Users/maxim/.m2/repository/org/eclipse/jetty/jetty-util/9.4.15.v20190215/jetty-util-9.4.15.v20190215.jar:/Users/maxim/.m2/repository/org/eclipse/jetty/jetty-io/9.4.15.v20190215/jetty-io-9.4.15.v20190215.jar:/Users/maxim/.m2/repository/org/eclipse/jetty/jetty-webapp/9.4.15.v20190215/jetty-webapp-9.4.15.v20190215.jar:/Users/maxim/.m2/repository/org/eclipse/jetty/jetty-xml/9.4.15.v20190215/jetty-xml-9.4.15.v20190215.jar:/Users/maxim/.m2/repository/org/eclipse/jetty/jetty-servlet/9.4.15.v20190215/jetty-servlet-9.4.15.v20190215.jar:/Users/maxim/.m2/repository/org/eclipse/jetty/jetty-security/9.4.15.v20190215/jetty-security-9.4.15.v20190215.jar:/Users/maxim/.m2/repository/org/eclipse/jetty/jetty-server/9.4.15.v20190215/jetty-server-9.4.15.v20190215.jar:/Users/maxim/.m2/repository/org/eclipse/jetty/websocket/websocket-server/9.4.15.v20190215/websocket-server-9.4.15.v20190215.jar:/Users/maxim/.m2/repository/org/eclipse/jetty/websocket/websocket-common/9.4.15.v20190215/websocket-common-9.4.15.v20190215.jar:/Users/maxim/.m2/repository/org/eclipse/jetty/websocket/websocket-api/9.4.15.v20190215/websocket-api-9.4.15.v20190215.jar:/Users/maxim/.m2/repository/org/eclipse/jetty/websocket/websocket-client/9.4.15.v20190215/websocket-client-9.4.15.v20190215.jar:/Users/maxim/.m2/repository/org/eclipse/jetty/jetty-client/9.4.15.v20190215/jetty-client-9.4.15.v20190215.jar:/Users/maxim/.m2/repository/org/eclipse/jetty/websocket/websocket-servlet/9.4.15.v20190215/websocket-servlet-9.4.15.v20190215.jar:/Users/maxim/.m2/repository/javax/servlet/javax.servlet-api/4.0.1/javax.servlet-api-4.0.1.jar:/Users/maxim/.m2/repository/org/eclipse/jetty/websocket/javax-websocket-server-impl/9.4.15.v20190215/javax-websocket-server-impl-9.4.15.v20190215.jar:/Users/maxim/.m2/repository/org/eclipse/jetty/jetty-annotations/9.4.15.v20190215/jetty-annotations-9.4.15.v20190215.jar:/Users/maxim/.m2/repository/org/eclipse/jetty/jetty-plus/9.4.15.v20190215/jetty-plus-9.4.15.v20190215.jar:/Users/maxim/.m2/repository/org/ow2/asm/asm/7.0/asm-7.0.jar:/Users/maxim/.m2/repository/org/ow2/asm/asm-commons/7.0/asm-commons-7.0.jar:/Users/maxim/.m2/repository/org/ow2/asm/asm-tree/7.0/asm-tree-7.0.jar:/Users/maxim/.m2/repository/org/ow2/asm/asm-analysis/7.0/asm-analysis-7.0.jar:/Users/maxim/.m2/repository/org/eclipse/jetty/websocket/javax-websocket-client-impl/9.4.15.v20190215/javax-websocket-client-impl-9.4.15.v20190215.jar:/Users/maxim/.m2/repository/javax/websocket/javax.websocket-api/1.1/javax.websocket-api-1.1.jar:/Users/maxim/.m2/repository/org/mortbay/jasper/apache-el/8.5.35.1/apache-el-8.5.35.1.jar:/Users/maxim/.m2/repository/io/github/openfeign/feign-jackson/9.5.1/feign-jackson-9.5.1.jar:/Users/maxim/.m2/repository/io/github/openfeign/feign-core/10.1.0/feign-core-10.1.0.jar:/Users/maxim/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/183.4886.37/IntelliJ IDEA.app/Contents/lib/idea_rt.jar:/Users/maxim/Library/Caches/IntelliJIdea2018.3/captureAgent/debugger-agent.jar\",\"os.name\":\"Mac OS X\",\"java.vm.vendor\":\"Oracle Corporation\",\"catalina.base\":\"/private/var/folders/cv/my6mj5ys1ng5s42nws4qrpy00000gn/T/tomcat.22603799958583154.8085\",\"java.vendor.url.bug\":\"http://bugreport.sun.com/bugreport/\",\"user.name\":\"maxim\",\"java.vm.name\":\"Java HotSpot(TM) 64-Bit Server VM\",\"sun.java.command\":\"org.stropa.autodoc.example.AutodocExampleApp\",\"java.home\":\"/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre\",\"java.version\":\"1.8.0_191\",\"sun.io.unicode.encoding\":\"UnicodeBig\"}},{\"type\":\"properties\",\"name\":\"systemEnvironment\",\"id\":\"65632257-3294-4ef5-aaaa-9cbd6e17ca41\",\"attributes\":{\"SHELL\":\"/bin/bash\",\"LOGNAME\":\"maxim\",\"PATH\":\"/Users/maxim/tools/google-cloud-sdk/bin:/Users/maxim/anaconda3/bin:/Users/maxim/anaconda3/condabin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/maxim/tools/apache-maven-3.5.3/bin:/Users/maxim/tools\",\"CONDA_SHLVL\":\"1\",\"PROJ_LIB\":\"/Users/maxim/anaconda3/share/proj\",\"CONDA_PYTHON_EXE\":\"/Users/maxim/anaconda3/bin/python\",\"XPC_SERVICE_NAME\":\"com.apple.xpc.launchd.oneshot.0x10000005.idea\",\"CONDA_EXE\":\"/Users/maxim/anaconda3/bin/conda\",\"CONDA_DEFAULT_ENV\":\"base\",\"HOME\":\"/Users/maxim\",\"Apple_PubSub_Socket_Render\":\"/private/tmp/com.apple.launchd.kiXpFqogAY/Render\",\"COMMAND_MODE\":\"unix2003\",\"USER\":\"maxim\",\"SECURITYSESSIONID\":\"186aa\",\"__CF_USER_TEXT_ENCODING\":\"0x1F5:0:2\",\"CPL_ZIP_ENCODING\":\"UTF-8\",\"XPC_FLAGS\":\"0x0\",\"KOPS_STATE_STORE\":\"s3://stropa-kops-state-store\",\"TMPDIR\":\"/var/folders/cv/my6mj5ys1ng5s42nws4qrpy00000gn/T/\",\"PWD\":\"/Users/maxim/projects/my/autodoc\",\"LC_CTYPE\":\"UTF-8\",\"CONDA_PREFIX\":\"/Users/maxim/anaconda3\",\"GDAL_DATA\":\"/Users/maxim/anaconda3/share/gdal\",\"CONDA_PROMPT_MODIFIER\":\"(base) \",\"SSH_AUTH_SOCK\":\"/private/tmp/com.apple.launchd.Ct9PLANdlE/Listeners\",\"JAVA_MAIN_CLASS_5892\":\"org.stropa.autodoc.example.AutodocExampleApp\"}},{\"type\":\"properties\",\"name\":\"springCloudClientHostInfo\",\"id\":\"5330a621-9198-47fa-bcea-63fe76f00466\",\"attributes\":{\"spring.cloud.client.hostname\":\"172.20.10.3\",\"spring.cloud.client.ip-address\":\"172.20.10.3\"}},{\"type\":\"rel\",\"from\":\"fbf3664f-54f1-4189-bd74-709d878f89a4\",\"to\":\"00be5c55-6f6e-4bc1-b9f3-dec94d07c4ec\",\"relation\":\"properties of\"},{\"type\":\"rel\",\"from\":\"b9dd9fc0-6896-4728-a9d1-e21d17ed788c\",\"to\":\"fbf3664f-54f1-4189-bd74-709d878f89a4\",\"relation\":\"properties of\"},{\"type\":\"rel\",\"from\":\"a1623a9b-2707-46d9-b640-68823b401636\",\"to\":\"fbf3664f-54f1-4189-bd74-709d878f89a4\",\"relation\":\"properties of\"},{\"type\":\"rel\",\"from\":\"a022eb40-3bab-4c4b-a4c2-6d75426d1266\",\"to\":\"fbf3664f-54f1-4189-bd74-709d878f89a4\",\"relation\":\"properties of\"},{\"type\":\"rel\",\"from\":\"65632257-3294-4ef5-aaaa-9cbd6e17ca41\",\"to\":\"fbf3664f-54f1-4189-bd74-709d878f89a4\",\"relation\":\"properties of\"},{\"type\":\"rel\",\"from\":\"5330a621-9198-47fa-bcea-63fe76f00466\",\"to\":\"fbf3664f-54f1-4189-bd74-709d878f89a4\",\"relation\":\"properties of\"},{\"type\":\"rel\",\"from\":\"00be5c55-6f6e-4bc1-b9f3-dec94d07c4ec\",\"to\":\"f5b8fdc1-40c8-49c9-8e74-ed6d0412c810\",\"relation\":\"deployed on\"}]")
+        onSuccess();
+
+
+        /*axios.get('http://localhost:8085/autodoc/data').then(resp => {
+            //console.log(resp.data);
+            data = resp.data;
+
+            onSuccess()
+            //showDemoNodes();
+        });*/
+    }
+
+    var autodoc = joint.shapes.autodoc;
+    var uml = joint.shapes.uml;
+
+    var graph = new joint.dia.Graph();
+
+    var paper = new joint.dia.Paper({
+        el: document.getElementById('paper'),
+        width: '100%',
+        height: 10000,
+        gridSize: 1,
+        model: graph
+    });
+
+    loadData(showGraph);
+
+
+
+    function showGraph() {
+
+        var nodes = [];
+        var nodesMap = new Map();
+
+        data.forEach(function (el) {
+            if (el.type !== 'rel') {
+                let node = new autodoc.Container({
+                    position: randPosition(),
+                    size: { width: el.name.length * 10, height: 100 },
+                    name: el.name,
+                    attributes: el.attributes,
+                    attrs: {
+                        '.container-body': {
+                            fill: 'rgba(48, 208, 198, 0.1)',
+                            stroke: 'rgba(48, 208, 198, 0.5)',
+                            'stroke-width': 1.5
+                        }
+                    }
+                });
+                nodes.push(node);
+                nodesMap.set(el.id, node);
+                graph.addCell(node);
+            }
+        });
+
+        data.forEach(function (el) {
+            if (el.type === 'rel' && visualSemantics[el.relation] === "embed") {
+                nodesMap.get(el.to).embed(nodesMap.get(el.from))
+            }
+        });
+
+        // event handler for task group button
+        paper.on('element:collapse', function(elementView, evt) {
+            evt.stopPropagation();
+            toggleCollapse(elementView.model);
+        });
+
+        /*joint.layout.DirectedGraph.layout(graph, {
+            setLinkVertices: false
+        });*/
+        layoutCells(graph);
+    }
+
+    function layoutEmbeddings(cells) {
+        cells.forEach(function (container) {
+            var embeds = container.getEmbeddedCells();
+            if (embeds.length === 0) return;
+            joint.layout.GridLayout.layout(embeds, {columns: 1, dx: 10, dy: 10});
+            container.fitEmbeds({padding: {horizontal: 10, bottom: 10, top: 40}});
+            let parent = container.getParentCell();
+            while (parent) {
+                parent.fitEmbeds();
+                if (parent.getEmbeddedCells().length == 1) {
+                    parent.resize(parent.size().width + 40, parent.size().height + 40)
+                }
+                parent = parent.getParentCell()
+            }
+        });
+    }
+
+    function layoutDirectedGraph(cells) {
+        joint.layout.DirectedGraph.layout(cells, {
+            setPosition: function (el, p) {
+                el.position(p.x, p.y, {deep: true});
+            }
+        });
+    }
+
+    function shiftCellsWithOneEmbedded(cells) {
+        cells.forEach(function (container) {
+            if (container.getEmbeddedCells().length === 1) {
+                //container.translate(-20, -20);
+                container.position(container.position().x - 20, container.position().y - 30)
+            }
+        })
+    }
+
+    function layoutCells(graph) {
+
+        var cells = graph.getCells();
+
+        layoutEmbeddings(cells);
+        layoutDirectedGraph(cells.filter(cell => {
+            return cell.getParentCell() == null;
+        }));
+        shiftCellsWithOneEmbedded(cells);
+        //layoutEmbeddings(cells);
+    }
+
+    function rand(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    function randPosition() {
+        return {x: rand(0, 800), y: rand(0, 800)}
+    }
+</script>
+
+</body>
+</html>
