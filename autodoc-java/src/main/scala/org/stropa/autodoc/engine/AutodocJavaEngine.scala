@@ -9,7 +9,7 @@ import org.stropa.autodoc.reporters.{Describer, DockerContainerDescriber, Hostna
 
 import scala.collection.JavaConverters._
 
-class AutodocJavaEngine(implicit context: java.util.Map[String, Any]) {
+class AutodocJavaEngine(context: java.util.Map[String, Any]) {
 
   val engine = new AutodocEngine()
 
@@ -72,7 +72,7 @@ class AutodocJavaEngine(implicit context: java.util.Map[String, Any]) {
   }
 
 
-  def describeSpringApplication(applicationContext: ApplicationContext, storage: FileStorage): Unit = {
+  def describeSpringApplication(applicationContext: ApplicationContext, storage: Storage): Unit = {
     doc("hostname")
     doc("docker-container")
     doc("application")

@@ -28,40 +28,22 @@ class AutodocEngine() extends Logging {
 
   def writeDocs(storage: Storage) = {
 
-    // *** DEBUG
-
-    /*addInfo(List(
-      /*
-      *Item(229da843-5e72-4497-842e-6b63392e544f,
-      * properties,
-      * applicationConfig: [classpath:/bootstrap.yml],
-      *   Map(
-      *     spring.cloud.config.uri -> http://config:8888,
-      *     spring.cloud.config.username -> user,
-      *     spring.cloud.config.fail-fast -> true,
-      *     spring.application.name -> account-service,
-      *     spring.cloud.config.password -> ${CONFIG_SERVICE_PASSWORD}))
-      * */
-      Item(id = "229da843-5e72-4497-842e-6b63392e544f", _type = "properties",
-        name = "applicationConfig: [classpath:/bootstrap.yml]",
-        attributes = Map[String, Any](
-          "spring.cloud.config.uri" -> "http://config:8888"
-        ))
-    ), List())*/
-
-    // *** DEBUG
 
     graph.nodes.foreach(item => {
       logger.trace(s"Writing item: $item")
       val filteredAttributes = item.attributes.filterNot{ case (k, v) => v.toString.contains("${")}
-      val map: Map[String, Any] =  Map("attributes" -> filteredAttributes) + ("id" -> item.id) + ("name" -> item.name.replace("applicationConfig: [classpath:/bootstrap.yml]", "HALLO")) +
-        ("type" -> item._type)
+      val map: Map[String, AnyRef] =  Map("type" -> item._type) +
+        ("name" -> item.name.replace("applicationConfig: [classpath:/bootstrap.yml]", "HALLO")) +
+        ("id" -> item.id) +
+        ( "attributes" -> filteredAttributes)
+
       logger.trace(s"Writing map: $map")
       storage.write(map)
     })
 
     graph.links.foreach(link => {
-      storage.write(Map[String, Any](
+      storage.write(Map[String, AnyRef](
+        "type" -> "rel",
         "from" -> link.from.id,
         "to" -> link.to.id,
         "relation" -> link.relation
@@ -73,40 +55,6 @@ class AutodocEngine() extends Logging {
 
   def writeSnapshot() = {}
 
-  /*if (config == null) {
-    config = ConfigFactory.load()
-  }
-
-  private val storageName = config.getString("storage.type")
-  private val storageConfig = config.getConfig("storage")
-
-  val storage: Storage =
-    if (storageName.toLowerCase() == "es")
-      new ESStorage(config.getConfig("storage"))
-    else if (storageName.toLowerCase() == "slf4j")
-      new LoggingStorage()
-    else if (storageName.toLowerCase() == "file")
-      new FileStorage(storageConfig)
-    else throw new IllegalArgumentException(s"Unsupported storage $storageName")*/
-
-  /*def writeSnapshot() = {
-
-    info("Writing autodoc snapshot...")
-    info(s"items: $items")
-    info(s"links: $links")
-
-    items.foreach(item => {
-      storage.write(item.attributes + ("id" -> item.id) + ("name" -> item.name) + ("type" -> item._type))
-    })
-
-    links.foreach(link => {
-      storage.write(Map[String, Any](
-        "from" -> link.from.id,
-        "to" -> link.to.id,
-        "relation" -> link.relation
-      ))
-    })
-  }*/
 
 
 }

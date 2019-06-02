@@ -10,12 +10,14 @@ import scala.collection.JavaConverters._
 
 class FileStorage(fileName: String) extends Storage {
 
+  private val file = new File(fileName)
+
   val mapper = new ObjectMapper()
   mapper.registerModule(DefaultScalaModule)
   mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
-  val writer = new PrintWriter(new File(fileName))
+  val writer = new PrintWriter(file)
 
-  override def write(map: Map[String, Any]) = {
+  override def write(map: Map[String, AnyRef]): Unit = {
 
     writer.write(mapper.writeValueAsString(map.asJava))
     writer.write(System.lineSeparator())
@@ -23,4 +25,7 @@ class FileStorage(fileName: String) extends Storage {
 
   }
 
+  override def clean(): Unit = {
+    file.delete()
+  }
 }
